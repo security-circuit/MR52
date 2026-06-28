@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MR52 Calc">
+<title>MR52 Address Calculator</title>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #0f172a;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  padding: 12px;
+}
+
+.container {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+h1 {
+  font-size: 24px;
+  text-align: center;
+  margin: 4px 0 8px;
+}
+
+.subtitle {
+  color: #cbd5e1;
+  font-size: 15px;
+  text-align: center;
+  line-height: 1.35;
+  margin-bottom: 14px;
+}
+
+.addressDisplay {
+  background: #020617;
+  border: 2px solid #475569;
+  border-radius: 16px;
+  text-align: center;
+  padding: 16px 10px;
+}
+
+.addressDisplay label {
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+#addressField {
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+  color: #ffffff;
+  border: 0;
+  text-align: center;
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 1;
+  margin-top: 4px;
+  outline: none;
+  -webkit-text-fill-color: #ffffff;
+  opacity: 1;
+}
+
+#binaryField {
+  color: #38bdf8;
+  font-family: Menlo, Consolas, monospace;
+  font-size: 16px;
+  margin-top: 6px;
+}
+
+.switchGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.dipButton {
+  width: 100%;
+  min-height: 122px;
+  border: 2px solid #4b5563;
+  border-radius: 14px;
+  background: #020617;
+  color: #ffffff;
+  padding: 8px 3px;
+  font-size: 14px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+.dipButton.on {
+  border-color: #22c55e;
+  background: #052e16;
+}
+
+.swName {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.swValue {
+  font-size: 12px;
+  color: #cbd5e1;
+  margin: 3px 0 7px;
+}
+
+.leverBox {
+  width: 32px;
+  height: 56px;
+  border: 2px solid #64748b;
+  border-radius: 8px;
+  background: #0f172a;
+  margin: 0 auto 7px;
+  position: relative;
+}
+
+.knob {
+  position: absolute;
+  width: 22px;
+  height: 21px;
+  border-radius: 5px;
+  left: 3px;
+  bottom: 4px;
+  background: #6b7280;
+}
+
+.dipButton.on .knob {
+  top: 4px;
+  bottom: auto;
+  background: #22c55e;
+}
+
+.stateText {
+  font-weight: 900;
+  font-size: 14px;
+  color: #d1d5db;
+}
+
+.dipButton.on .stateText {
+  color: #22c55e;
+}
+
+.controlRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.actionButton {
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  padding: 15px 10px;
+  background: #374151;
+  color: white;
+  font-size: 17px;
+  font-weight: 800;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+.primary {
+  background: #2563eb;
+}
+
+.inputLabel {
+  display: block;
+  color: #cbd5e1;
+  font-size: 15px;
+  margin-bottom: 7px;
+}
+
+#reverseInput {
+  width: 100%;
+  box-sizing: border-box;
+  background: #020617;
+  color: #ffffff;
+  border: 2px solid #475569;
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 24px;
+  outline: none;
+}
+
+.error {
+  display: none;
+  background: #7f1d1d;
+  border: 1px solid #ef4444;
+  color: #fecaca;
+  padding: 10px;
+  border-radius: 12px;
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td, th {
+  border-bottom: 1px solid #374151;
+  padding: 9px 4px;
+  font-size: 15px;
+  text-align: left;
+}
+
+th {
+  color: #cbd5e1;
+}
+
+.note {
+  color: #cbd5e1;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+#statusLine {
+  color: #a7f3d0;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+@media (max-width: 390px) {
+  body {
+    padding: 9px;
+  }
+
+  h1 {
+    font-size: 21px;
+  }
+
+  #addressField {
+    font-size: 62px;
+  }
+
+  .switchGrid {
+    gap: 6px;
+  }
+
+  .dipButton {
+    min-height: 112px;
+    padding-left: 1px;
+    padding-right: 1px;
+  }
+
+  .leverBox {
+    width: 29px;
+    height: 50px;
+  }
+
+  .knob {
+    width: 19px;
+    height: 19px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <div class="card">
+    <h1>MR52 Address Calculator</h1>
+    <div class="subtitle">Tap the DIP switches. The address field below should change immediately.</div>
+
+    <div class="addressDisplay">
+      <label for="addressField">Calculated Address</label>
+      <input id="addressField" type="text" value="0" readonly>
+      <div id="binaryField">Binary: 00000</div>
+    </div>
+
+    <div class="switchGrid">
+      <button id="btn1" class="dipButton" type="button" onclick="toggleDip(1)">
+        <div class="swName">SW1</div>
+        <div class="swValue">Value 1</div>
+        <div class="leverBox"><div class="knob"></div></div>
+        <div id="state1" class="stateText">OFF</div>
+      </button>
+
+      <button id="btn2" class="dipButton" type="button" onclick="toggleDip(2)">
+        <div class="swName">SW2</div>
+        <div class="swValue">Value 2</div>
+        <div class="leverBox"><div class="knob"></div></div>
+        <div id="state2" class="stateText">OFF</div>
+      </button>
+
+      <button id="btn3" class="dipButton" type="button" onclick="toggleDip(3)">
+        <div class="swName">SW3</div>
+        <div class="swValue">Value 4</div>
+        <div class="leverBox"><div class="knob"></div></div>
+        <div id="state3" class="stateText">OFF</div>
+      </button>
+
+      <button id="btn4" class="dipButton" type="button" onclick="toggleDip(4)">
+        <div class="swName">SW4</div>
+        <div class="swValue">Value 8</div>
+        <div class="leverBox"><div class="knob"></div></div>
+        <div id="state4" class="stateText">OFF</div>
+      </button>
+
+      <button id="btn5" class="dipButton" type="button" onclick="toggleDip(5)">
+        <div class="swName">SW5</div>
+        <div class="swValue">Value 16</div>
+        <div class="leverBox"><div class="knob"></div></div>
+        <div id="state5" class="stateText">OFF</div>
+      </button>
+    </div>
+
+    <div class="controlRow">
+      <button class="actionButton" type="button" onclick="allOff()">All OFF</button>
+      <button class="actionButton" type="button" onclick="allOn()">All ON</button>
+    </div>
+
+    <div id="statusLine">Ready</div>
+  </div>
+
+  <div class="card">
+    <label class="inputLabel" for="reverseInput">Reverse calculation: enter address 0-31</label>
+    <input id="reverseInput" type="number" inputmode="numeric" pattern="[0-9]*" min="0" max="31" placeholder="Example: 13">
+    <div style="height:10px"></div>
+    <button class="actionButton primary" type="button" onclick="decodeAddress()">Show DIP Switches</button>
+    <div id="errorBox" class="error"></div>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Switch</th>
+          <th>Value</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>SW1</td><td>1</td><td id="table1">OFF</td></tr>
+        <tr><td>SW2</td><td>2</td><td id="table2">OFF</td></tr>
+        <tr><td>SW3</td><td>4</td><td id="table3">OFF</td></tr>
+        <tr><td>SW4</td><td>8</td><td id="table4">OFF</td></tr>
+        <tr><td>SW5</td><td>16</td><td id="table5">OFF</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card note">
+    <strong>MR52 values:</strong><br>
+    SW1 = 1, SW2 = 2, SW3 = 4, SW4 = 8, SW5 = 16.<br><br>
+    This version uses real buttons instead of hidden checkboxes. Open in Safari, not the iCloud/Files preview.
+  </div>
+
+</div>
+
+<script>
+var dipState = {
+  1: false,
+  2: false,
+  3: false,
+  4: false,
+  5: false
+};
+
+var dipValue = {
+  1: 1,
+  2: 2,
+  3: 4,
+  4: 8,
+  5: 16
+};
+
+function el(id) {
+  return document.getElementById(id);
+}
+
+function clearError() {
+  el("errorBox").style.display = "none";
+  el("errorBox").innerHTML = "";
+}
+
+function showError(message) {
+  el("errorBox").innerHTML = message;
+  el("errorBox").style.display = "block";
+}
+
+function calculateAddress() {
+  var total = 0;
+  var i;
+
+  for (i = 1; i <= 5; i++) {
+    if (dipState[i]) {
+      total = total + dipValue[i];
+    }
+  }
+
+  return total;
+}
+
+function refreshScreen() {
+  var address = calculateAddress();
+  var binary = ("00000" + address.toString(2)).slice(-5);
+  var i;
+  var status;
+
+  el("addressField").value = String(address);
+  el("reverseInput").value = String(address);
+  el("binaryField").innerHTML = "Binary: " + binary;
+
+  for (i = 1; i <= 5; i++) {
+    status = dipState[i] ? "ON" : "OFF";
+
+    if (dipState[i]) {
+      el("btn" + i).className = "dipButton on";
+    } else {
+      el("btn" + i).className = "dipButton";
+    }
+
+    el("state" + i).innerHTML = status;
+    el("table" + i).innerHTML = status;
+  }
+
+  el("statusLine").innerHTML = "Current address: " + address;
+  clearError();
+}
+
+function toggleDip(n) {
+  dipState[n] = !dipState[n];
+  refreshScreen();
+}
+
+function allOff() {
+  var i;
+  for (i = 1; i <= 5; i++) {
+    dipState[i] = false;
+  }
+  refreshScreen();
+}
+
+function allOn() {
+  var i;
+  for (i = 1; i <= 5; i++) {
+    dipState[i] = true;
+  }
+  refreshScreen();
+}
+
+function decodeAddress() {
+  var raw = el("reverseInput").value;
+  var address;
+  var i;
+
+  if (raw === "") {
+    showError("Enter an address from 0 to 31.");
+    return;
+  }
+
+  address = parseInt(raw, 10);
+
+  if (isNaN(address)) {
+    showError("Address must be a number.");
+    return;
+  }
+
+  if (address < 0 || address > 31) {
+    showError("MR52 address must be between 0 and 31.");
+    return;
+  }
+
+  for (i = 1; i <= 5; i++) {
+    dipState[i] = (address & dipValue[i]) !== 0;
+  }
+
+  refreshScreen();
+}
+
+el("reverseInput").addEventListener("keyup", function(event) {
+  if (event.key === "Enter" || event.keyCode === 13) {
+    decodeAddress();
+  }
+});
+
+refreshScreen();
+</script>
+
+<noscript>
+  <div style="padding:20px;color:white;background:#7f1d1d;">
+    JavaScript is disabled. This calculator requires JavaScript.
+  </div>
+</noscript>
+
+</body>
+</html>
