@@ -5,20 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="MR52 Calc">
+<meta name="theme-color" content="#7f1d1d">
 <title>MR52 Address Calculator</title>
 
 <style>
+:root {
+  --pcb-red-dark: #3f0d0d;
+  --pcb-red: #7f1d1d;
+  --pcb-red-mid: #991b1b;
+  --pcb-red-bright: #dc2626;
+  --panel: rgba(69, 10, 10, 0.94);
+  --panel-border: #f59e0b;
+  --copper: #f59e0b;
+  --copper-soft: #fbbf24;
+  --silkscreen: #fff7ed;
+  --muted: #fed7aa;
+  --black: #09090b;
+  --green-led: #22c55e;
+  --off-gray: #78716c;
+  --blue-action: #1d4ed8;
+}
+
 html, body {
   margin: 0;
   padding: 0;
-  background: #0f172a;
-  color: white;
+  color: var(--silkscreen);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   -webkit-text-size-adjust: 100%;
 }
 
 body {
+  min-height: 100vh;
   padding: 12px;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(245, 158, 11, 0.22) 0 2px, transparent 3px),
+    radial-gradient(circle at 85% 12%, rgba(245, 158, 11, 0.18) 0 2px, transparent 3px),
+    radial-gradient(circle at 20% 82%, rgba(245, 158, 11, 0.16) 0 2px, transparent 3px),
+    linear-gradient(90deg, transparent 0 16px, rgba(245,158,11,0.14) 17px, transparent 18px),
+    linear-gradient(0deg, transparent 0 22px, rgba(245,158,11,0.10) 23px, transparent 24px),
+    linear-gradient(135deg, var(--pcb-red-dark), var(--pcb-red), var(--pcb-red-mid));
+  background-size: auto, auto, auto, 64px 64px, 72px 72px, auto;
 }
 
 .container {
@@ -27,21 +53,26 @@ body {
 }
 
 .card {
-  background: #1f2937;
-  border: 1px solid #374151;
+  background: var(--panel);
+  border: 2px solid rgba(245, 158, 11, 0.85);
   border-radius: 18px;
   padding: 16px;
   margin-bottom: 14px;
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.35),
+    inset 0 0 0 1px rgba(255, 247, 237, 0.06);
 }
 
 h1 {
   font-size: 24px;
   text-align: center;
   margin: 4px 0 8px;
+  color: var(--silkscreen);
+  letter-spacing: 0.02em;
 }
 
 .subtitle {
-  color: #cbd5e1;
+  color: var(--muted);
   font-size: 15px;
   text-align: center;
   line-height: 1.35;
@@ -49,16 +80,21 @@ h1 {
 }
 
 .addressDisplay {
-  background: #020617;
-  border: 2px solid #475569;
+  background:
+    linear-gradient(90deg, rgba(245,158,11,0.18), transparent 22%, transparent 78%, rgba(245,158,11,0.18)),
+    #111111;
+  border: 2px solid var(--copper);
   border-radius: 16px;
   text-align: center;
   padding: 16px 10px;
+  box-shadow: inset 0 0 18px rgba(245,158,11,0.16);
 }
 
 .addressDisplay label {
-  color: #cbd5e1;
+  color: var(--muted);
   font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 #addressField {
@@ -75,10 +111,11 @@ h1 {
   outline: none;
   -webkit-text-fill-color: #ffffff;
   opacity: 1;
+  text-shadow: 0 0 12px rgba(245,158,11,0.35);
 }
 
 #binaryField {
-  color: #38bdf8;
+  color: var(--copper-soft);
   font-family: Menlo, Consolas, monospace;
   font-size: 16px;
   margin-top: 6px;
@@ -94,9 +131,10 @@ h1 {
 .dipButton {
   width: 100%;
   min-height: 122px;
-  border: 2px solid #4b5563;
+  border: 2px solid #92400e;
   border-radius: 14px;
-  background: #020617;
+  background:
+    linear-gradient(180deg, #18181b, #09090b);
   color: #ffffff;
   padding: 8px 3px;
   font-size: 14px;
@@ -104,30 +142,37 @@ h1 {
   -webkit-appearance: none;
   appearance: none;
   touch-action: manipulation;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
 }
 
 .dipButton.on {
-  border-color: #22c55e;
-  background: #052e16;
+  border-color: var(--green-led);
+  background:
+    radial-gradient(circle at top, rgba(34,197,94,0.22), transparent 48%),
+    linear-gradient(180deg, #142318, #06130a);
+  box-shadow:
+    0 0 10px rgba(34,197,94,0.28),
+    inset 0 0 0 1px rgba(34,197,94,0.18);
 }
 
 .swName {
   font-size: 16px;
   font-weight: 900;
+  color: var(--silkscreen);
 }
 
 .swValue {
   font-size: 12px;
-  color: #cbd5e1;
+  color: var(--muted);
   margin: 3px 0 7px;
 }
 
 .leverBox {
   width: 32px;
   height: 56px;
-  border: 2px solid #64748b;
+  border: 2px solid #d97706;
   border-radius: 8px;
-  background: #0f172a;
+  background: #1c1917;
   margin: 0 auto 7px;
   position: relative;
 }
@@ -139,23 +184,25 @@ h1 {
   border-radius: 5px;
   left: 3px;
   bottom: 4px;
-  background: #6b7280;
+  background: var(--off-gray);
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.35);
 }
 
 .dipButton.on .knob {
   top: 4px;
   bottom: auto;
-  background: #22c55e;
+  background: var(--green-led);
+  box-shadow: 0 0 8px rgba(34,197,94,0.55);
 }
 
 .stateText {
   font-weight: 900;
   font-size: 14px;
-  color: #d1d5db;
+  color: #d6d3d1;
 }
 
 .dipButton.on .stateText {
-  color: #22c55e;
+  color: var(--green-led);
 }
 
 .controlRow {
@@ -167,10 +214,10 @@ h1 {
 
 .actionButton {
   width: 100%;
-  border: 0;
+  border: 1px solid rgba(245,158,11,0.65);
   border-radius: 14px;
   padding: 15px 10px;
-  background: #374151;
+  background: #78350f;
   color: white;
   font-size: 17px;
   font-weight: 800;
@@ -180,12 +227,13 @@ h1 {
 }
 
 .primary {
-  background: #2563eb;
+  background: #1d4ed8;
+  border-color: #93c5fd;
 }
 
 .inputLabel {
   display: block;
-  color: #cbd5e1;
+  color: var(--muted);
   font-size: 15px;
   margin-bottom: 7px;
 }
@@ -193,20 +241,21 @@ h1 {
 #reverseInput {
   width: 100%;
   box-sizing: border-box;
-  background: #020617;
+  background: #111111;
   color: #ffffff;
-  border: 2px solid #475569;
+  border: 2px solid var(--copper);
   border-radius: 14px;
   padding: 16px;
   font-size: 24px;
   outline: none;
+  -webkit-text-fill-color: #ffffff;
 }
 
 .error {
   display: none;
   background: #7f1d1d;
-  border: 1px solid #ef4444;
-  color: #fecaca;
+  border: 1px solid #fecaca;
+  color: #ffffff;
   padding: 10px;
   border-radius: 12px;
   margin-top: 10px;
@@ -219,27 +268,34 @@ table {
 }
 
 td, th {
-  border-bottom: 1px solid #374151;
+  border-bottom: 1px solid rgba(245,158,11,0.42);
   padding: 9px 4px;
   font-size: 15px;
   text-align: left;
 }
 
 th {
-  color: #cbd5e1;
+  color: var(--copper-soft);
 }
 
 .note {
-  color: #cbd5e1;
+  color: var(--muted);
   font-size: 14px;
   line-height: 1.4;
 }
 
 #statusLine {
-  color: #a7f3d0;
+  color: #bbf7d0;
   font-size: 14px;
   text-align: center;
   margin-top: 10px;
+}
+
+.traceLine {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--copper), transparent);
+  margin: 12px 0 0;
+  opacity: 0.9;
 }
 
 @media (max-width: 390px) {
@@ -290,6 +346,8 @@ th {
       <input id="addressField" type="text" value="0" readonly>
       <div id="binaryField">Binary: 00000</div>
     </div>
+
+    <div class="traceLine"></div>
 
     <div class="switchGrid">
       <button id="btn1" class="dipButton" type="button" onclick="toggleDip(1)">
